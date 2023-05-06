@@ -1,4 +1,7 @@
 from typing import List
+from ase import Atoms as AseAtoms
+from ase.io import write as aseWrite
+from ase.calculators.vasp import Vasp
 
 from atom import Atom
 from cell import Cell
@@ -8,35 +11,74 @@ STAR_LEDGER = '*' * 50
 EQUAL_LEDGER = '=' * 50
 MINUS_LEDGER = '-' * 50
 
+
 def get_value(raw: List[str], name: str) -> str:
 	"""Returns the value associated with the given name as a string."""
 	return raw[raw.index(name) + 2]
+
 
 def get_list(raw: List[str], name: str, ledger: str) -> List[str]:
 	"""Returns the values associated with the given name as a string list."""
 	start = raw.index(name) + 2
 	return ' '.join(raw[start:raw.index(ledger, start)]).split()
 
+
 def get_int(raw: List[str], name: str) -> int:
 	"""Returns the value associated with the given name as an int."""
 	return int(get_value(raw, name))
+
 
 def get_float(raw: List[str], name: str) -> float:
 	"""Returns the value associated with the given name as a float."""
 	return float(get_value(raw, name))
 
+
 def get_float_list(raw: List[str], name: str, ledger: str) -> List[float]:
 	"""Returns the values associated with the given name as a float list."""
 	return list(map(float, ' '.join(list(map(lambda l: ' '.join(l.split()), get_list(raw, name, ledger)))).split()))
+
 
 def get_vec3(raw: List[str], name: str) -> List[float]:
 	"""Returns the value associated with the given name as a three-dimensional float vector."""
 	return list(map(float, get_value(raw, name).split()))
 
+
 def get_vec3_list(raw: List[str], name: str, ledger: str) -> List[List[float]]:
 	"""Returns the values associated with the given name as a three-dimensional float vector list."""
 	floats = get_float_list(raw, name, ledger)
 	return [floats[i:i + 3] for i in range(0, len(floats), 3)]
+
+
+def write_to_extxyz(cells: List[Cell]):
+	print(f'nb of atoms: {len(cells[0].atoms)}')
+	
+	frames = []
+	for cell in cells:
+		print(f'atom species: {cell.atoms[0].species}')
+		print(f'atom pos: {cell.atoms[0].pos}')
+		print(f'atom forces: {cell.atoms[0].forces}')
+		frame = AseAtoms(cell.atoms[0].species, [cell.atoms[0].pos])
+		
+		for atom in cell.atoms[1:len(cell.atoms)]:
+			print(f'atom species: {atom.species}')
+			print(f'atom pos: {atom.pos}')
+			print(f'atom forces: {atom.forces}')
+
+			aseAtom = AseAtoms(atom.species, [atom.pos])
+			frame.extend(aseAtom)
+		
+		frame.info['Energy'] = 0
+		frame.info['Stress'] = [[-1.0, 0.0, 0.0], [0.0, -2.0, 0.0], [0.0, 0.0, -3.0]]
+
+		frames.append(frame)
+
+	calc = Vasp()
+
+	# frame1 = aseAtoms('CH3OHNaC', positions=[[0, 0, 0], [0.5, 0.5, 0.5], [-0.5, -0.5, 0.5], [-0.5, 0.5, -0.5], [0.5, -0.5, -0.5], [1.0, 1.0, 1.0], [2.0, 2.0, 2.0], [3.0, 3.0, 3.0]], calculator=calc)
+	# frame2 = aseAtoms('H2ONaC', positions=[[0, 0, 0], [0.7, 0.7, 0.0], [-0.7, -0.7, 0.0], [1.0, 1.0, 1.0], [2.0, 2.0, 2.0]], calculator=calc)
+
+	aseWrite('output.xyz', images=frames, format='extxyz')
+
 
 # Read the input file into a list of lines.
 with open('ML_AB') as file:
@@ -56,16 +98,21 @@ for cell_index in range(1, cell_count + 1):
 	raw: List[str] = ml_ab[start:ml_ab.index('XY YZ ZX', start) + 3]
 
 	# Read the cell data for the current cell.
-	lattice: List[List[float]] = get_vec3_list(raw, 'Primitive lattice vectors (ang.)', EQUAL_LEDGER)
+	lattice: List[List[float]] = get_vec3_list(
+		raw, 'Primitive lattice vectors (ang.)', EQUAL_LEDGER)
 	energy: float = get_float(raw, 'Total energy (eV)')
-	stress: List[List[float]] = [get_vec3(raw, 'XX YY ZZ'), get_vec3(raw, 'XY YZ ZX')]
+	stress: List[List[float]] = [
+		get_vec3(raw, 'XX YY ZZ'), get_vec3(raw, 'XY YZ ZX')]
 
 	# Read the atom data for the current cell.
-	species_counts: List[str] = get_list(raw, 'Atom types and atom numbers', EQUAL_LEDGER)
+	species_counts: List[str] = get_list(
+		raw, 'Atom types and atom numbers', EQUAL_LEDGER)
 	species: List[str] = species_counts[0::2]
 	counts: List[int] = list(map(int, species_counts[1::2]))
-	pos: List[List[float]] = get_vec3_list(raw, 'Atomic positions (ang.)', EQUAL_LEDGER)
-	forces: List[List[float]] = get_vec3_list(raw, 'Forces (eV ang.^-1)', EQUAL_LEDGER)
+	pos: List[List[float]] = get_vec3_list(
+		raw, 'Atomic positions (ang.)', EQUAL_LEDGER)
+	forces: List[List[float]] = get_vec3_list(
+		raw, 'Forces (eV ang.^-1)', EQUAL_LEDGER)
 
 	# Create a list of the atoms in the current cell.
 	atoms = []
@@ -77,6 +124,6 @@ for cell_index in range(1, cell_count + 1):
 	# Create and append the current cell to the list of cells.
 	cells.append(Cell(lattice, energy, stress, atoms))
 
-# TODO: Do something with the created cells list.
+write_to_extxyz(cells)
 
-print('__parser module__')
+# TODO: Do something with the created cells list.

@@ -1,3 +1,5 @@
+from typing import List
+
 from atom import Atom
 
 class Cell:
@@ -18,7 +20,7 @@ class Cell:
 		The contained atoms.
 	"""
 
-	def __init__(self, lattice : list[list[float]], energy: float, stress: list[list[float]], atoms: list[Atom]) -> None:
+	def __init__(self, lattice : List[List[float]], energy: float, stress: List[List[float]], atoms: List[Atom]) -> None:
 		"""
 		Parameters
 		----------

@@ -1,3 +1,5 @@
+from typing import List
+
 class Atom:
 	"""
 	Represents an atom.
@@ -14,7 +16,7 @@ class Atom:
 		The forces (in eV/Angstrom).
 	"""
 	
-	def __init__(self, species: str, pos: list[float], forces: list[float]):
+	def __init__(self, species: str, pos: List[float], forces: List[float]):
 		"""
 		Parameters
 		----------

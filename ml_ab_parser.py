@@ -14,78 +14,78 @@ MINUS_LEDGER = '-' * 50
 
 
 def get_value(raw: List[str], name: str) -> str:
-    """Returns the value associated with the given name as a string."""
-    return raw[raw.index(name) + 2]
+	"""Returns the value associated with the given name as a string."""
+	return raw[raw.index(name) + 2]
 
 
 def get_list(raw: List[str], name: str, ledger: str) -> List[str]:
-    """Returns the values associated with the given name as a string list."""
-    start = raw.index(name) + 2
-    return ' '.join(raw[start:raw.index(ledger, start)]).split()
+	"""Returns the values associated with the given name as a string list."""
+	start = raw.index(name) + 2
+	return ' '.join(raw[start:raw.index(ledger, start)]).split()
 
 
 def get_int(raw: List[str], name: str) -> int:
-    """Returns the value associated with the given name as an int."""
-    return int(get_value(raw, name))
+	"""Returns the value associated with the given name as an int."""
+	return int(get_value(raw, name))
 
 
 def get_float(raw: List[str], name: str) -> float:
-    """Returns the value associated with the given name as a float."""
-    return float(get_value(raw, name))
+	"""Returns the value associated with the given name as a float."""
+	return float(get_value(raw, name))
 
 
 def get_float_list(raw: List[str], name: str, ledger: str) -> List[float]:
-    """Returns the values associated with the given name as a float list."""
-    return list(map(float, ' '.join(list(map(lambda l: ' '.join(l.split()), get_list(raw, name, ledger)))).split()))
+	"""Returns the values associated with the given name as a float list."""
+	return list(map(float, ' '.join(list(map(lambda l: ' '.join(l.split()), get_list(raw, name, ledger)))).split()))
 
 
 def get_vec3(raw: List[str], name: str) -> List[float]:
-    """Returns the value associated with the given name as a three-dimensional float vector."""
-    return list(map(float, get_value(raw, name).split()))
+	"""Returns the value associated with the given name as a three-dimensional float vector."""
+	return list(map(float, get_value(raw, name).split()))
 
 
 def get_vec3_list(raw: List[str], name: str, ledger: str) -> List[List[float]]:
-    """Returns the values associated with the given name as a three-dimensional float vector list."""
-    floats = get_float_list(raw, name, ledger)
-    return [floats[i:i + 3] for i in range(0, len(floats), 3)]
+	"""Returns the values associated with the given name as a three-dimensional float vector list."""
+	floats = get_float_list(raw, name, ledger)
+	return [floats[i:i + 3] for i in range(0, len(floats), 3)]
 
 def list_to_string(list: List[float]) -> str:
-    return ' '.join(str(i) for i in list)
+	return ' '.join(str(i) for i in list)
 
 def two_dim_list_to_string(list: List[List[float]]) -> str:
-     return ' '.join(list_to_string(s) for s in list)
+	 return ' '.join(list_to_string(s) for s in list)
 
-def write_to_extxyz(cells: List[Cell]):
-    print(f'nb of atoms: {len(cells[0].atoms)}')
+def write_to_extxyz(cells: List[Cell], output_file):
+	print(f'nb of atoms: {len(cells[0].atoms)}')
 
-    frames = []
-    for cell in cells:
-        print(f'atom species: {cell.atoms[0].species}')
-        print(f'atom pos: {cell.atoms[0].pos}')
-        print(f'atom forces: {cell.atoms[0].forces}')
-        frame = AseAtoms(cell.atoms[0].species, [cell.atoms[0].pos])
+	frames = []
+	for cell in cells:
+		print(f'atom species: {cell.atoms[0].species}')
+		print(f'atom pos: {cell.atoms[0].pos}')
+		print(f'atom forces: {cell.atoms[0].forces}')
+		frame = AseAtoms(cell.atoms[0].species, [cell.atoms[0].pos])
 
-        for atom in cell.atoms[1:len(cell.atoms)]:
-            print(f'atom species: {atom.species}')
-            print(f'atom pos: {atom.pos}')
-            print(f'atom forces: {atom.forces}')
+		for atom in cell.atoms[1:len(cell.atoms)]:
+			print(f'atom species: {atom.species}')
+			print(f'atom pos: {atom.pos}')
+			print(f'atom forces: {atom.forces}')
 
-            aseAtom = AseAtoms(atom.species, [atom.pos])
-            aseAtom.arrays['forces'] = np.array([atom.forces])
-            frame.extend(aseAtom)
+			aseAtom = AseAtoms(atom.species, [atom.pos])
+			aseAtom.arrays['forces'] = np.array([atom.forces])
+			frame.extend(aseAtom)
 
-        frame.info['energy'] = cell.energy
-        frame.info['stress'] = two_dim_list_to_string(cell.stress)
-        frame.info['lattice'] = two_dim_list_to_string(cell.lattice)
+		frame.info['energy'] = cell.energy
+		frame.info['stress'] = two_dim_list_to_string(cell.stress)
+		frame.info['lattice'] = two_dim_list_to_string(cell.lattice)
 
-        frames.append(frame)
+		frames.append(frame)
 
-    aseWrite('output.extxyz', images=frames, format='extxyz')
-    
+	aseWrite(output_file, images=frames, format='extxyz')
+	
 
-def convert():
+def convert(input_file, output_file):
 	# Read the input file into a list of lines.
-	with open('ML_AB') as file:
+	with open(input_file) as file:
 		ml_ab = [' '.join(line.split()) for line in file]
 
 	# Get the number of cells in the ML_AB file.
@@ -128,9 +128,4 @@ def convert():
 		# Create and append the current cell to the list of cells.
 		cells.append(Cell(lattice, energy, stress, atoms))
 
-	write_to_extxyz(cells)
-
-convert()
-
-#print(list_to_string([213.12312, 21.4334, 546.56]))
-#print(two_dim_list_to_string([[213.12312, 21.4334, 546.56], [213.12312, 21.4334, 546.56], [213.12312, 21.4334, 546.56]]))
+	write_to_extxyz(cells, output_file)

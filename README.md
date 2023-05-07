@@ -14,7 +14,6 @@ This tool can be used in three different ways that are covered in the following 
 
 ## 1. Package import
 
-<pre>
 ```python
 # my_script.py
 
@@ -25,8 +24,6 @@ output_file = 'output.extxyz'
 
 convert(input_file, output_file)
 ```
-</pre>
-
 
 This code will read data from ```ML_AB```, convert it and save into ```output.extxyz```.
 

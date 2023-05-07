@@ -3,6 +3,7 @@ from ase import Atoms as AseAtoms
 from ase.io import write as aseWrite
 from ase.calculators.vasp import Vasp
 import numpy as np
+from tqdm import tqdm
 
 from atom import Atom
 from cell import Cell
@@ -56,19 +57,20 @@ def two_dim_list_to_string(list: List[List[float]]) -> str:
 	 return ' '.join(list_to_string(s) for s in list)
 
 def write_to_extxyz(cells: List[Cell], output_file):
-	print(f'nb of atoms: {len(cells[0].atoms)}')
+	# print(f'nb of atoms: {len(cells[0].atoms)}')
 
 	frames = []
-	for cell in cells:
-		print(f'atom species: {cell.atoms[0].species}')
+	print(f'output file path: {output_file}')
+	for cell in tqdm(cells, 'saving data to output file'):
+		""" print(f'atom species: {cell.atoms[0].species}')
 		print(f'atom pos: {cell.atoms[0].pos}')
-		print(f'atom forces: {cell.atoms[0].forces}')
+		print(f'atom forces: {cell.atoms[0].forces}') """
 		frame = AseAtoms(cell.atoms[0].species, [cell.atoms[0].pos])
 
 		for atom in cell.atoms[1:len(cell.atoms)]:
-			print(f'atom species: {atom.species}')
+			""" print(f'atom species: {atom.species}')
 			print(f'atom pos: {atom.pos}')
-			print(f'atom forces: {atom.forces}')
+			print(f'atom forces: {atom.forces}') """
 
 			aseAtom = AseAtoms(atom.species, [atom.pos])
 			aseAtom.arrays['forces'] = np.array([atom.forces])
@@ -93,10 +95,8 @@ def convert(input_file, output_file):
 
 	# Create a list of cells.
 	cells: List[Cell] = []
-	for cell_index in range(1, cell_count + 1):
-		if cell_index % 10 == 0:
-			print(f'Parsing cell {cell_index}/{cell_count}')
-
+	print(f'input file path: {input_file}')
+	for cell_index in tqdm(range(1, cell_count + 1), desc='Loading input file'):
 		# Extract the relevant lines for the current cell from the input file.
 		start: int = ml_ab.index(f'Configuration num. {cell_index}')
 		raw: List[str] = ml_ab[start:ml_ab.index('XY YZ ZX', start) + 3]

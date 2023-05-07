@@ -8,10 +8,11 @@ This tool can be used in three different ways that are covered in the following 
 - Call the executable tool anywhere from CLI (requires installation of the tool)
 > **NOTE:** The third option works for unix systems only.    
 
+<br>
+
 ---
 
 ## Use cases
-
 ## 1. Package import
 
 ```python
@@ -27,6 +28,8 @@ convert(input_file, output_file)
 
 This code will read data from ```ML_AB```, convert it and save into ```output.extxyz```.
 
+<br>
+
 ## 2. Python script
 > **NOTE:** make sure that you are in the directory, where ```mlab-to-extxyz.py``` is located. 
 #### Without specifying output file name 
@@ -34,6 +37,8 @@ This code will read data from ```ML_AB```, convert it and save into ```output.ex
 
 #### With specifying output file name (optional)
 - Run ```mlab-to-extxyz.py path/to/ML_AB/file my_out_put.extxyz``` this will generate a output.extxyz file.
+
+<br>
 
 ## 3. CLI
 > **NOTE:** To use the tool from the CLI, you have to install it first. Take a look at the [installation guide](#installation-guide) below.
@@ -44,6 +49,8 @@ This code will read data from ```ML_AB```, convert it and save into ```output.ex
 #### With specifying output file name (optional)
 - Run ```mlab-to-extxyz path/to/ML_AB/file my_out_put.extxyz``` this will generate a output.extxyz file.
 
+<br>
+
 ---
 
 ## Installation guide <a id="installation-guide"></a>
@@ -52,6 +59,8 @@ This code will read data from ```ML_AB```, convert it and save into ```output.ex
 - Run the install script. ```sudo ./install```
 - Restart your terminal.
 - Ready to go.
+
+<br>
 
 ---
 
@@ -63,6 +72,8 @@ This code will read data from ```ML_AB```, convert it and save into ```output.ex
 #### Uninstall steps
 - First add execution permission to the uninstall script. ```chmod +x uninstall```
 - Run the uninstall script. ```sudo ./uninstall```
+
+<br>
 
 ---
 

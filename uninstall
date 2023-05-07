@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# tool name
+# TOOL_NAME="mlab-to-extxyz"
+
+# TARGET_PATH="/home/$USER/.local/bin/mlab-to-extxyz-parser"
+TARGET_PATH="/home/opt/mlab-to-extxyz-parser"
+LINK_PATH="/usr/local/bin/mlab-to-extxyz"
+
+# remove symbolic link
+if [ -d $LINK_PATH ]; then
+    sudo rm -f $LINK_PATH
+fi
+
+# remove source
+if [ -d $TARGET_PATH ]; then
+    sudo rm -rf $TARGET_PATH
+fi

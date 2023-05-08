@@ -104,7 +104,7 @@ def convert(input_file, output_file):
 		lattice: List[List[float]] = get_vec3_list(
 			raw, 'Primitive lattice vectors (ang.)', EQUAL_LEDGER)
 		energy: float = get_float(raw, 'Total energy (eV)')
-		stress: List[List[float]] = [
+		virial: List[List[float]] = [
 			get_vec3(raw, 'XX YY ZZ'), get_vec3(raw, 'XY YZ ZX')]
 
 		# Read the atom data for the current cell.

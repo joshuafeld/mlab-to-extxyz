@@ -12,11 +12,11 @@ class Atom:
 		The species (chemical symbol).
 	pos : list[float]
 		The position in Cartesian coordinates (given in Angstrom).
-	forces : list[float]
-		The forces (in eV/Angstrom).
+	force : list[float]
+		The force (in eV/Angstrom).
 	"""
 	
-	def __init__(self, species: str, pos: List[float], forces: List[float]):
+	def __init__(self, species: str, pos: List[float], force: List[float]):
 		"""
 		Parameters
 		----------
@@ -24,10 +24,10 @@ class Atom:
 			The species (chemical symbol).
 		pos : list[float]
 			The position in Cartesian coordinates (given in Angstrom).
-		forces : list[float]
-			The forces (in eV/Angstrom).
+		force : list[float]
+			The force (in eV/Angstrom).
 		"""
 
 		self.species = species
 		self.pos = pos
-		self.forces = forces
+		self.force = force

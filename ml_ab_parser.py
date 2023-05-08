@@ -63,20 +63,20 @@ def write_to_extxyz(cells: List[Cell], output_file):
 	for cell in tqdm(cells, 'saving data to output file'):
 		""" print(f'atom species: {cell.atoms[0].species}')
 		print(f'atom pos: {cell.atoms[0].pos}')
-		print(f'atom forces: {cell.atoms[0].forces}') """
+		print(f'atom force: {cell.atoms[0].force}') """
 		frame = AseAtoms(cell.atoms[0].species, [cell.atoms[0].pos])
 
 		for atom in cell.atoms[1:len(cell.atoms)]:
 			""" print(f'atom species: {atom.species}')
 			print(f'atom pos: {atom.pos}')
-			print(f'atom forces: {atom.forces}') """
+			print(f'atom force: {atom.force}') """
 
 			aseAtom = AseAtoms(atom.species, [atom.pos])
-			aseAtom.arrays['forces'] = np.array([atom.forces])
+			aseAtom.arrays['force'] = np.array([atom.force])
 			frame.extend(aseAtom)
 
 		frame.info['energy'] = cell.energy
-		frame.info['stress'] = two_dim_list_to_string(cell.stress)
+		frame.info['virial'] = two_dim_list_to_string(cell.virial)
 		frame.info['lattice'] = two_dim_list_to_string(cell.lattice)
 
 		frames.append(frame)
@@ -106,7 +106,9 @@ def convert(input_file, output_file):
 		energy: float = get_float(raw, 'Total energy (eV)')
 		virial: List[List[float]] = [
 			get_vec3(raw, 'XX YY ZZ'), get_vec3(raw, 'XY YZ ZX')]
+		virial: List[List[float]] = [[virial[0][0], virial[1][0], virial[1][2]], [virial[1][0], virial[0][1], virial[1][1]], [virial[1][2], virial[1][1], virial[0][2] ]]
 
+		
 		# Read the atom data for the current cell.
 		species_counts: List[str] = get_list(
 			raw, 'Atom types and atom numbers', EQUAL_LEDGER)
@@ -114,7 +116,7 @@ def convert(input_file, output_file):
 		counts: List[int] = list(map(int, species_counts[1::2]))
 		pos: List[List[float]] = get_vec3_list(
 			raw, 'Atomic positions (ang.)', EQUAL_LEDGER)
-		forces: List[List[float]] = get_vec3_list(
+		force: List[List[float]] = get_vec3_list(
 			raw, 'Forces (eV ang.^-1)', EQUAL_LEDGER)
 
 		# Create a list of the atoms in the current cell.
@@ -122,9 +124,9 @@ def convert(input_file, output_file):
 		for j, (s, c) in enumerate(zip(species, counts)):
 			for k in range(c):
 				l: int = sum(counts[:j]) + k
-				atoms.append(Atom(s, pos[l], forces[l]))
+				atoms.append(Atom(s, pos[l], force[l]))
 
 		# Create and append the current cell to the list of cells.
-		cells.append(Cell(lattice, energy, stress, atoms))
+		cells.append(Cell(lattice, energy, virial, atoms))
 
 	write_to_extxyz(cells, output_file)

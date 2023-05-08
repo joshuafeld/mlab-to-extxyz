@@ -2,9 +2,9 @@
 
 #### Converts ML AB files to the extended XYZ (extxyz) file format.
 
-This tool can be used in three different ways that are covered in the following secctions. 
+This tool can be used in three different ways that are covered in the following section. 
 - Import as a package to your existing python script.
-- Call the the .py script directly through CLI while providing the needed arguments
+- Call the the .py script directly through CLI while providing the needed arguments.
 - Call the executable tool anywhere from CLI (requires installation of the tool)
 > **NOTE:** The third option works for unix systems only.    
 
@@ -16,7 +16,7 @@ This tool can be used in three different ways that are covered in the following 
 ## 1. Package import
 
 ```python
-# my_script.py
+# file: my_script.py
 
 from ml_ab_parser import convert
 
@@ -26,28 +26,28 @@ output_file = 'output.extxyz'
 convert(input_file, output_file)
 ```
 
-This code will read data from ```ML_AB```, convert it and save into ```output.extxyz```.
+This code will read data from ```ML_AB```, convert it, and save it into ```output.extxyz```.
 
 <br>
 
 ## 2. Python script
-> **NOTE:** make sure that you are in the directory, where ```mlab-to-extxyz.py``` is located. 
-#### Without specifying output file name 
-- Run ```mlab-to-extxyz.py path/to/ML_AB/file``` this will generate a output.extxyz file.
+> **NOTE:** Make sure that you are in the directory, where ```mlab-to-extxyz.py``` is located. 
+#### Without output file name 
+- Run ```mlab-to-extxyz.py path/to/ML_AB/file```. This will generate a ```output.extxyz``` file.
 
-#### With specifying output file name (optional)
-- Run ```mlab-to-extxyz.py path/to/ML_AB/file my_out_put.extxyz``` this will generate a output.extxyz file.
+#### With output file name (optional)
+- Run ```mlab-to-extxyz.py path/to/ML_AB/file my_output.extxyz```. This will generate a ```my_output.extxyz``` file.
 
 <br>
 
 ## 3. CLI
-> **NOTE:** To use the tool from the CLI, you have to install it first. Take a look at the [installation guide](#installation-guide) below.
+> **NOTE:** To use the tool from the CLI, you have to install it first. Take a look at the **[installation guide](#installation-guide)** below.
 
-#### Without specifying output file name 
-- Run ```mlab-to-extxyz path/to/ML_AB/file``` this will generate a output.extxyz file.
+#### Without output file name 
+- Run ```mlab-to-extxyz path/to/ML_AB/file```. This will generate a ```output.extxyz``` file.
 
-#### With specifying output file name (optional)
-- Run ```mlab-to-extxyz path/to/ML_AB/file my_out_put.extxyz``` this will generate a output.extxyz file.
+#### With output file name (optional)
+- Run ```mlab-to-extxyz path/to/ML_AB/file my_output.extxyz``` this will generate a ```my_output.extxyz``` file.
 
 <br>
 
@@ -55,8 +55,8 @@ This code will read data from ```ML_AB```, convert it and save into ```output.ex
 
 ## Installation guide <a id="installation-guide"></a>
 > **NOTE:** Unix systems only
-- First add execution permission to the install script. ```chmod +x install```
-- Run the install script. ```sudo ./install```
+- First add execute permission to the install script: ```chmod +x install```.
+- Run the install script: ```sudo ./install```.
 - Restart your terminal.
 - Ready to go.
 
@@ -64,14 +64,14 @@ This code will read data from ```ML_AB```, convert it and save into ```output.ex
 
 ---
 
-## Uninstall (Before updates) 
+## Uninstall (Also before updates) 
 > **NOTE:** Unix systems only
 
 > **_NOTE:_** If you want to update the source code, run first the uninstall script, update your repository, then run the install script again.
 
 #### Uninstall steps
-- First add execution permission to the uninstall script. ```chmod +x uninstall```
-- Run the uninstall script. ```sudo ./uninstall```
+- First add execution permission to the uninstall script: ```chmod +x uninstall```.
+- Run the uninstall script: ```sudo ./uninstall```.
 
 <br>
 

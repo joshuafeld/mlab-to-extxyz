@@ -13,7 +13,6 @@ STAR_LEDGER = '*' * 50
 EQUAL_LEDGER = '=' * 50
 MINUS_LEDGER = '-' * 50
 
-
 def get_value(raw: List[str], name: str) -> str:
 	"""Returns the value associated with the given name as a string."""
 	return raw[raw.index(name) + 2]

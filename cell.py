@@ -1,3 +1,4 @@
+from ase import Atoms
 from atom import Atom
 
 class Cell:
@@ -12,8 +13,8 @@ class Cell:
         The three lattice vectors (in Angstrom).
     energy : float
         The total energy (in eV).
-    stress : list[list[float]]
-        The stress tensor (in kbar).
+    virial : list[list[float]]
+        The Cauchy stress tensor (in kbar).
     atoms : list[Atom]
         The contained atoms.
     """
@@ -34,5 +35,16 @@ class Cell:
 
         self.lattice = lattice
         self.energy = energy
-        self.stress = stress
+        self.virial = [[stress[0][0], stress[1][0], stress[1][2]],
+                [stress[1][0], stress[0][1], stress[1][1]],
+                [stress[1][2], stress[1][1], stress[0][2]]]
         self.atoms = atoms
+
+    def to_ase(self) -> Atoms:
+        ase: Atoms = Atoms()
+        for atom in self.atoms:
+            ase += atom.to_ase()
+        ase.info['energy'] = self.energy
+        ase.info['virial'] = ' '.join([str(item) for sublist in self.virial for item in sublist])
+        ase.info['lattice'] = ' '.join([str(item) for sublist in self.lattice for item in sublist])
+        return ase

@@ -1,3 +1,7 @@
+from ase import Atoms
+
+import numpy as np
+
 class Atom:
     """
     Represents an atom.
@@ -8,9 +12,9 @@ class Atom:
     ----------
     species : str
         The species (chemical symbol).
-    pos : list[float]
+    pos : numpy.ndarray
         The position in Cartesian coordinates (given in Angstrom).
-    forces : list[float]
+    forces : numpy.ndarray
         The forces (in eV/Angstrom).
     """
     
@@ -27,5 +31,10 @@ class Atom:
         """
 
         self.species = species
-        self.pos = pos
-        self.forces = forces
+        self.pos = np.array([pos])
+        self.forces = np.array([forces])
+
+    def to_ase(self) -> Atoms:
+        ase = Atoms(self.species, self.pos)
+        ase.arrays['force'] = self.forces
+        return ase

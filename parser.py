@@ -1,5 +1,6 @@
 from ase import Atoms
 from ase.io import write
+from tqdm import tqdm
 
 from atom import Atom
 from cell import Cell
@@ -50,10 +51,7 @@ def parse_mlab(path: str) -> list[Cell]:
 
     # Create a list of cells.
     cells: list[Cell] = []
-    for cell_index in range(1, cell_count + 1):
-        if cell_index % 10 == 0:
-            print(f'Parsing cell {cell_index}/{cell_count}')
-
+    for cell_index in tqdm(range(1, cell_count + 1), desc='Parsing input file'):
         # Extract the relevant lines for the current cell from the input file.
         start: int = ml_ab.index(f'Configuration num. {cell_index}')
         raw: list[str] = ml_ab[start:ml_ab.index('XY YZ ZX', start) + 3]

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+pip install --upgrade ase
+pip install --upgrade tqdm
+
 TARGET_PATH="/home/opt/mlab-to-extxyz"
 LINK_PATH="/usr/local/bin/mlab-to-extxyz"
 

@@ -6,18 +6,37 @@ import os
 from parser import parse_mlab
 from writer import write_extxyz
 
-def main():
+def convert(input_path: str, output_path: str) -> None:
+    """Converts from ML AB to extended XYZ file format.
+
+    Parameters
+    ----------
+    input_path: str
+        The path of the input file.
+    output_path: str
+        The path of the output file.
+    """
+
+    write_extxyz(parse_mlab(input_path), output_path)
+
+def main() -> None:
+    # Set the input file path from the first command line argument if provided or use the default
+    # value (ML_AB) and check if the file exists.
     input_path = 'ML_AB'
     if len(sys.argv) >= 2:
         input_path = os.path.abspath(sys.argv[1])
-        if not os.path.exists(input_path):
-            print('the input file you provided does not exist or the path to it is wrong')
-            return
+    if not os.path.exists(input_path):
+        print('The input file does not exist.')
+        return
 
+    # Set the output file path from the second command line argument if provided or use the default
+    # value (output.extxyz).
     output_path = 'output.extxyz'
     if len(sys.argv) >= 3:
         output_path = os.path.abspath(sys.argv[2])
 
-    write_extxyz(parse_mlab(input_path), output_path)
+    # Convert from ML AB to extended XYZ.
+    convert(input_path, output_path)
 
-main()
+if __name__ == "__main__":
+    main()

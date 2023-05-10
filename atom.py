@@ -1,4 +1,5 @@
 from ase import Atoms
+from typing import List
 
 import numpy as np
 
@@ -18,7 +19,7 @@ class Atom:
         The forces (in eV/Angstrom).
     """
     
-    def __init__(self, species: str, pos: list[float], forces: list[float]):
+    def __init__(self, species: str, pos: List[float], forces: List[float]) -> None:
         """
         Parameters
         ----------
@@ -35,6 +36,14 @@ class Atom:
         self.forces = np.array([forces])
 
     def to_ase(self) -> Atoms:
+        """Converts the atom to an ASE Atoms object.
+
+        Returns
+        -------
+        Atoms
+            An ASE Atoms object containing the atom data.
+        """
+
         ase = Atoms(self.species, self.pos)
         ase.arrays['force'] = self.forces
         return ase

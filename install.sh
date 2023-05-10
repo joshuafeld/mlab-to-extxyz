@@ -16,8 +16,4 @@ sudo mkdir -p $TARGET_PATH
 sudo cp *.py $TARGET_PATH/
 sudo cp mlab-to-extxyz $TARGET_PATH/mlab-to-extxyz
 
-if [ ! -d $LINK_PATH ]; then
-    sudo rm $LINK_PATH
-fi
-
-sudo ln -s $TARGET_PATH/mlab-to-extxyz $LINK_PATH
+sudo ln -f -s $TARGET_PATH/mlab-to-extxyz $LINK_PATH

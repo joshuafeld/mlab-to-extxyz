@@ -20,6 +20,11 @@ def get_value(raw: List[str], name: str) -> str:
         A list of lines in the raw file.
     name: str
         The name of the desired value.
+
+    Returns
+    -------
+    str
+        The value as a string.
     """
 
     return raw[raw.index(name) + 2]
@@ -32,9 +37,14 @@ def get_list(raw: List[str], name: str, ledger: str) -> List[str]:
     raw: list[str]
         A list of lines in the raw file.
     name: str
-        The name of the desired value.
+        The name of the desired values.
     ledger: str
-        The ledger that ends the value section.
+        The ledger that ends the values section.
+
+    Returns
+    -------
+    list[str]
+        The values as a string list.
     """
 
     start: int = raw.index(name) + 2
@@ -49,6 +59,11 @@ def get_int(raw: List[str], name: str) -> int:
         A list of lines in the raw file.
     name: str
         The name of the desired value.
+
+    Returns
+    -------
+    int
+        The value as an int.
     """
 
     return int(get_value(raw, name))
@@ -62,6 +77,11 @@ def get_float(raw: List[str], name: str) -> float:
         A list of lines in the raw file.
     name: str
         The name of the desired value.
+
+    Returns
+    -------
+    float
+        The value as a float.
     """
 
     return float(get_value(raw, name))
@@ -74,9 +94,14 @@ def get_float_list(raw: List[str], name: str, ledger: str) -> List[float]:
     raw: list[str]
         A list of lines in the raw file.
     name: str
-        The name of the desired value.
+        The name of the desired values.
     ledger: str
-        The ledger that ends the value section.
+        The ledger that ends the values section.
+
+    Returns
+    -------
+    list[float]
+        The values as a float list.
     """
 
     return list(map(float, ' '.join(list(map(lambda l: ' '.join(l.split()), get_list(raw, name,
@@ -91,6 +116,11 @@ def get_vec3(raw: List[str], name: str) -> List[float]:
         A list of lines in the raw file.
     name: str
         The name of the desired value.
+
+    Returns
+    -------
+    list[float]
+        The value as a three-dimensional float vector.
     """
 
     return list(map(float, get_value(raw, name).split()))
@@ -103,9 +133,14 @@ def get_vec3_list(raw: List[str], name: str, ledger: str) -> List[List[float]]:
     raw: list[str]
         A list of lines in the raw file.
     name: str
-        The name of the desired value.
+        The name of the desired values.
     ledger: str
-        The ledger that ends the value section.
+        The ledger that ends the values section.
+
+    Returns
+    -------
+    list[list[float]]
+        The values as a three-dimensional float vector list.
     """
 
     floats: List[float] = get_float_list(raw, name, ledger)
@@ -118,6 +153,11 @@ def parse_mlab(path: str) -> List[Cell]:
     ----------
     path: str
         The path to the input file.
+
+    Returns
+    -------
+    list[Cell]
+        A list of cells containing the data of the input file.
     """
 
     # Read the input file into a list of lines.
